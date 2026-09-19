@@ -1,0 +1,6 @@
+{
+  "name": "Digital Marketing Business Dashboard",
+  "description": "Real-time digital marketing & affiliate business performance dashboard with daily metric updates, multi-client role-based access, automated notifications, and API integrations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
