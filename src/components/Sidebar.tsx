@@ -42,24 +42,56 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <aside className="w-full md:w-56 lg:w-60 bg-slate-900/85 backdrop-blur-md shrink-0 flex flex-col justify-between p-3 sm:p-4 rounded-2xl border border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.12)] text-slate-100">
       <div className="space-y-4">
         
-        {/* Client Workspace Selector */}
-        <div className="bg-slate-900/90 rounded-xl p-2.5 border border-cyan-500/30 shadow-inner">
-          <div className="text-[10px] uppercase font-bold tracking-wider text-cyan-400 mb-1 px-1 flex items-center justify-between">
-            <span>Client Workspace</span>
-            <Layers className="w-3 h-3 text-cyan-400" />
+        {/* SLX GLOBAL Client Workspace Branding Card */}
+        <div className="bg-slate-900/90 rounded-xl p-3 border border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.15)] flex flex-col gap-2.5">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] uppercase font-bold tracking-widest text-cyan-400 flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" /> Active Workspace
+            </span>
+            <span className="text-[9px] font-extrabold px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-500/30">
+              Enterprise
+            </span>
           </div>
-          <select
-            value={activeClientId}
-            onChange={(e) => onSelectClient(e.target.value)}
-            aria-label="Select Client Workspace"
-            className="w-full text-xs font-semibold text-slate-100 bg-slate-950 border border-cyan-500/30 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-cyan-400 cursor-pointer"
-          >
-            {clients.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name} ({c.plan})
-              </option>
-            ))}
-          </select>
+
+          {/* SLX Brand Logo & Workspace Name */}
+          <div className="flex items-center gap-2.5 p-2 rounded-lg bg-slate-950 border border-cyan-500/30">
+            <img 
+              src="/assets/slx-logo.png" 
+              alt="SLX GLOBAL" 
+              className="w-9 h-9 rounded-md object-contain bg-slate-900 p-0.5 border border-cyan-500/40 shrink-0" 
+            />
+            <div className="min-w-0 flex-1">
+              <h3 className="text-sm font-extrabold text-cyan-300 tracking-wide truncate">
+                SLX GLOBAL
+              </h3>
+              <p className="text-[10px] text-slate-400 font-medium truncate">
+                Digital Performance & E-Com
+              </p>
+            </div>
+          </div>
+
+          {/* Workspace Switcher / Add Workspace Button */}
+          <div className="flex items-center justify-between text-[11px] font-semibold text-slate-300 pt-1 border-t border-cyan-500/20">
+            <select
+              value={activeClientId}
+              onChange={(e) => onSelectClient(e.target.value)}
+              aria-label="Select Client Workspace"
+              className="bg-slate-950 border border-cyan-500/30 text-slate-200 text-[11px] font-bold rounded px-1.5 py-0.5 focus:outline-none focus:border-cyan-400 cursor-pointer flex-1 max-w-[130px] truncate"
+            >
+              {clients.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+            <button
+              type="button"
+              onClick={() => onTabChange('admin')}
+              className="text-[10px] font-bold text-cyan-400 hover:text-cyan-300 hover:underline flex items-center gap-0.5"
+            >
+              + Add
+            </button>
+          </div>
         </div>
 
         {/* Navigation Items */}

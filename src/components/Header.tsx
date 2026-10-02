@@ -42,15 +42,12 @@ export const Header: React.FC<HeaderProps> = ({
         
         {/* Left: Branding & Subtitles */}
         <div className="flex items-start sm:items-center gap-3.5">
-          {/* Logo icon container */}
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-cyan-600 via-blue-600 to-cyan-400 flex items-center justify-center text-white shadow-[0_0_15px_rgba(6,182,212,0.4)] shrink-0">
-            <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="20" x2="18" y2="10"></line>
-              <line x1="12" y1="20" x2="12" y2="4"></line>
-              <line x1="6" y1="20" x2="6" y2="14"></line>
-              <polyline points="4 6 12 2 20 6"></polyline>
-            </svg>
-          </div>
+          {/* SLX Brand Logo */}
+          <img 
+            src="/assets/slx-logo.png" 
+            alt="SLX GLOBAL" 
+            className="w-12 h-12 rounded-xl object-contain bg-slate-950 p-1 border border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.4)] shrink-0" 
+          />
 
           <div>
             <div className="flex items-center gap-2.5 flex-wrap">

@@ -2,28 +2,12 @@ import { DashboardData, ClientAccount, User, AuditLog, EmailNotification, ApiKey
 
 export const initialClients: ClientAccount[] = [
   {
-    id: 'client-apex',
-    name: 'Apex Growth Digital',
-    companyName: 'Apex Marketing & Media LLC',
-    industry: 'E-Commerce & Affiliate Media',
+    id: 'client-slx',
+    name: 'SLX GLOBAL',
+    companyName: 'SLX Global Media & Ventures',
+    industry: 'Digital Performance & E-Commerce',
     plan: 'Enterprise',
     active: true,
-  },
-  {
-    id: 'client-zenith',
-    name: 'Zenith Direct Media',
-    companyName: 'Zenith Ventures Inc.',
-    industry: 'Performance Ads & DTC',
-    plan: 'Growth Pro',
-    active: false,
-  },
-  {
-    id: 'client-alpha',
-    name: 'Alpha Scale Labs',
-    companyName: 'Alpha Scale Digital',
-    industry: 'Infoproducts & Affiliates',
-    plan: 'Starter',
-    active: false,
   },
 ];
 
@@ -33,15 +17,15 @@ export const initialUsers: User[] = [
     name: 'Admin Manager',
     email: 'admin@dashboard.com',
     role: 'admin',
-    clientId: 'client-apex',
+    clientId: 'client-slx',
     avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
   },
   {
     id: 'user-client',
     name: 'Rajesh Verma (Client Lead)',
-    email: 'client@apexmarketing.com',
+    email: 'client@slxglobal.com',
     role: 'admin',
-    clientId: 'client-apex',
+    clientId: 'client-slx',
     avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
   },
   {
@@ -49,14 +33,14 @@ export const initialUsers: User[] = [
     name: 'Investor Partner',
     email: 'investor@dashboard.com',
     role: 'investor',
-    clientId: 'client-apex',
+    clientId: 'client-slx',
     avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
   },
 ];
 
 export const initialDashboardData: DashboardData = {
-  clientId: 'client-apex',
-  clientName: 'Apex Growth Digital',
+  clientId: 'client-slx',
+  clientName: 'SLX GLOBAL',
   lastUpdated: 'Just now (Real-time Synced)',
   
   targetGoal: 2800000, // ₹28,00,000

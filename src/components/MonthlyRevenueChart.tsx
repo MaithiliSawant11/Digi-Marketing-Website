@@ -74,13 +74,15 @@ export const MonthlyRevenueChart: React.FC<MonthlyRevenueChartProps> = ({
   } else if (viewMode === 'yearly') {
     activeItems = yearlyBarItems;
   } else {
-    activeItems = filteredMonthlyData.map((m) => ({
+    // Show 6 to 8 active months for a clean, spacious chart layout
+    const allMonthly = filteredMonthlyData.map((m) => ({
       id: m.id,
       label: `${m.month}`,
       subLabel: `${m.year}`,
       revenue: m.revenue,
-      color: m.color || '#3b82f6',
+      color: m.color || '#06b6d4',
     }));
+    activeItems = selectedYear === 'all' && allMonthly.length > 8 ? allMonthly.slice(-8) : allMonthly;
   }
 
   const maxRev = Math.max(100, ...activeItems.map((d) => d.revenue));
@@ -99,7 +101,7 @@ export const MonthlyRevenueChart: React.FC<MonthlyRevenueChartProps> = ({
   const displayYears = Array.from(new Set([...availableYears, ...futureYears])).sort((a: number, b: number) => a - b);
 
   return (
-    <div className="bg-slate-900/85 backdrop-blur-md rounded-2xl p-5 border border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.12)] text-slate-100">
+    <div className="bg-slate-900/85 backdrop-blur-md rounded-2xl p-5 border border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.12)] text-slate-100 overflow-hidden w-full min-w-0 flex flex-col">
       
       {/* Top Header & View Controls */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 border-b border-cyan-500/20 pb-3">
@@ -204,7 +206,7 @@ export const MonthlyRevenueChart: React.FC<MonthlyRevenueChartProps> = ({
       </div>
 
       {/* Chart Graphic Area */}
-      <div className="relative pt-6 pb-2">
+      <div className="relative pt-6 pb-2 overflow-hidden min-w-0">
         {activeItems.length === 0 ? (
           <div className="h-56 flex flex-col items-center justify-center text-center p-4 bg-slate-950/40 rounded-xl border border-dashed border-cyan-500/20">
             <p className="text-xs font-bold text-slate-300">
@@ -217,18 +219,18 @@ export const MonthlyRevenueChart: React.FC<MonthlyRevenueChartProps> = ({
             </p>
           </div>
         ) : (
-          <div className="flex">
+          <div className="flex w-full overflow-hidden">
             {/* Y Axis Labels */}
-            <div className="w-16 sm:w-20 shrink-0 flex flex-col justify-between text-[11px] sm:text-xs font-semibold text-cyan-400/80 h-56 pr-2 text-right select-none">
+            <div className="w-14 sm:w-16 shrink-0 flex flex-col justify-between text-[10px] sm:text-xs font-semibold text-cyan-400/80 h-56 pr-2 text-right select-none">
               {yTicks.map((val) => (
-                <span key={val} className="leading-none">
+                <span key={val} className="leading-none truncate">
                   {formatINR(val)}
                 </span>
               ))}
             </div>
 
             {/* Chart Area */}
-            <div className="relative flex-1 h-56">
+            <div className="relative flex-1 h-56 min-w-0 overflow-hidden">
               {/* Grid Lines */}
               {yTicks.map((val, idx) => {
                 const topPct = (idx / (yTicks.length - 1)) * 100;
@@ -242,7 +244,7 @@ export const MonthlyRevenueChart: React.FC<MonthlyRevenueChartProps> = ({
               })}
 
               {/* Bars */}
-              <div className="absolute inset-0 flex items-end justify-between gap-1 sm:gap-2 px-1 z-10">
+              <div className="absolute inset-0 flex items-end justify-around gap-1.5 sm:gap-2 px-2 z-10 overflow-hidden">
                 {activeItems.map((item, idx) => {
                   const heightPct = Math.max(4, Math.min(100, (item.revenue / maxY) * 100));
                   const isHovered = hoveredIndex === idx;
@@ -250,14 +252,14 @@ export const MonthlyRevenueChart: React.FC<MonthlyRevenueChartProps> = ({
                   return (
                     <div
                       key={item.id}
-                      className="flex-1 flex flex-col items-center h-full justify-end group relative cursor-pointer"
+                      className="flex-1 flex flex-col items-center h-full justify-end group relative cursor-pointer min-w-0"
                       onMouseEnter={() => setHoveredIndex(idx)}
                       onMouseLeave={() => setHoveredIndex(null)}
                     >
                       {/* Top label */}
                       <span
-                        className={`text-[9px] sm:text-[10px] font-bold text-slate-700 mb-1 transition-transform group-hover:scale-105 whitespace-nowrap ${
-                          isHovered ? 'text-blue-600 font-extrabold' : ''
+                        className={`text-[8px] sm:text-[9px] font-extrabold text-cyan-300 mb-1 transition-transform group-hover:scale-105 truncate max-w-full ${
+                          isHovered ? 'text-cyan-200 font-black' : ''
                         }`}
                       >
                         {item.revenue >= 100000 
@@ -271,15 +273,14 @@ export const MonthlyRevenueChart: React.FC<MonthlyRevenueChartProps> = ({
                       <div
                         style={{
                           height: `${heightPct}%`,
-                          backgroundColor: item.color,
                         }}
-                        className="w-full max-w-[34px] rounded-t-sm transition-all duration-300 group-hover:brightness-95 group-hover:shadow-sm"
+                        className="w-full max-w-[28px] sm:max-w-[34px] rounded-t-md bg-gradient-to-t from-cyan-600 via-cyan-500 to-cyan-400 border-t border-x border-cyan-300/80 shadow-[0_0_10px_rgba(6,182,212,0.4)] transition-all duration-300 group-hover:brightness-125"
                       />
 
                       {/* Tooltip */}
                       {isHovered && (
-                        <div className="absolute -top-12 z-30 bg-slate-900 text-white text-xs rounded-lg px-2.5 py-1.5 shadow-lg whitespace-nowrap pointer-events-none transform -translate-x-1/2 left-1/2">
-                          <div className="font-bold">{item.label} {item.subLabel || ''}</div>
+                        <div className="absolute -top-12 z-30 bg-slate-950 text-slate-100 border border-cyan-500/50 text-xs rounded-lg px-2.5 py-1.5 shadow-[0_0_15px_rgba(6,182,212,0.4)] whitespace-nowrap pointer-events-none transform -translate-x-1/2 left-1/2">
+                          <div className="font-bold text-cyan-300">{item.label} {item.subLabel || ''}</div>
                           <div className="text-emerald-400 font-semibold">{formatINR(item.revenue)}</div>
                         </div>
                       )}
@@ -293,15 +294,15 @@ export const MonthlyRevenueChart: React.FC<MonthlyRevenueChartProps> = ({
 
         {/* X Axis Labels */}
         {activeItems.length > 0 && (
-          <div className="flex ml-16 sm:ml-20 pt-2 border-t border-slate-200">
-            <div className="flex-1 flex justify-between gap-1 sm:gap-2 px-1">
+          <div className="flex ml-14 sm:ml-16 pt-2 border-t border-cyan-500/30 overflow-hidden">
+            <div className="flex-1 flex justify-around gap-1 sm:gap-2 px-2 overflow-hidden">
               {activeItems.map((item) => (
-                <div key={item.id} className="flex-1 text-center flex flex-col items-center">
-                  <span className="text-[10px] sm:text-[11px] font-medium text-slate-600 leading-tight">
+                <div key={item.id} className="flex-1 text-center flex flex-col items-center min-w-0">
+                  <span className="text-[10px] sm:text-[11px] font-bold text-cyan-300 leading-tight truncate w-full">
                     {item.label}
                   </span>
                   {item.subLabel && (
-                    <span className="text-[9px] sm:text-[10px] text-slate-400 leading-tight">
+                    <span className="text-[9px] text-slate-400 leading-tight truncate w-full">
                       {item.subLabel}
                     </span>
                   )}
