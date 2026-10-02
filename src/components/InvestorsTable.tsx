@@ -69,15 +69,15 @@ export const InvestorsTable: React.FC<InvestorsTableProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-2xs flex flex-col">
+    <div className="bg-slate-900/80 backdrop-blur-md rounded-2xl p-5 border border-cyan-500/30 shadow-lg flex flex-col">
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
-          Investors & Investment Details
+        <h2 className="text-base sm:text-lg font-bold text-cyan-400 tracking-tight flex items-center gap-2">
+          <span>Investors & Investment Details</span>
         </h2>
         {canEdit && (
           <button
             onClick={() => setIsAdding(!isAdding)}
-            className="text-xs font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-1 hover:underline"
+            className="text-xs font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1 hover:underline transition-colors"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Add Investor</span>
@@ -86,19 +86,19 @@ export const InvestorsTable: React.FC<InvestorsTableProps> = ({
       </div>
 
       {isAdding && (
-        <form onSubmit={handleAddSubmit} className="mb-3 p-2.5 bg-emerald-50/70 border border-emerald-200 rounded-xl flex items-center gap-2 flex-wrap text-xs">
+        <form onSubmit={handleAddSubmit} className="mb-3 p-3 bg-slate-800/90 border border-cyan-500/40 rounded-xl flex items-center gap-2 flex-wrap text-xs">
           <input
             type="text"
             placeholder="Investor Name"
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
-            className="px-2.5 py-1.5 bg-white border border-slate-200 rounded-md font-medium text-slate-800 flex-1 min-w-[130px]"
+            className="px-2.5 py-1.5 bg-slate-950 border border-cyan-500/40 rounded-md font-medium text-slate-100 placeholder-slate-500 flex-1 min-w-[130px] focus:outline-none focus:border-cyan-400"
             required
           />
           <select
             value={newType}
             onChange={(e) => setNewType(e.target.value)}
-            className="px-2 py-1.5 bg-white border border-slate-200 rounded-md font-medium text-slate-800"
+            className="px-2 py-1.5 bg-slate-950 border border-cyan-500/40 rounded-md font-medium text-slate-100 focus:outline-none focus:border-cyan-400"
           >
             <option value="Indian">Indian</option>
             <option value="NRI (UAE)">NRI (UAE)</option>
@@ -116,19 +116,19 @@ export const InvestorsTable: React.FC<InvestorsTableProps> = ({
             placeholder="₹ Lakh (e.g. 5.0)"
             value={newAmount}
             onChange={(e) => setNewAmount(e.target.value)}
-            className="px-2.5 py-1.5 bg-white border border-slate-200 rounded-md font-medium text-slate-800 w-24"
+            className="px-2.5 py-1.5 bg-slate-950 border border-cyan-500/40 rounded-md font-medium text-slate-100 placeholder-slate-500 w-28 focus:outline-none focus:border-cyan-400"
             required
           />
           <button
             type="submit"
-            className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md font-semibold"
+            className="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded-md font-semibold transition-colors"
           >
             Add
           </button>
           <button
             type="button"
             onClick={() => setIsAdding(false)}
-            className="px-2 py-1.5 text-slate-500 hover:text-slate-800"
+            className="px-2 py-1.5 text-slate-400 hover:text-slate-200"
           >
             <X className="w-4 h-4" />
           </button>
@@ -138,21 +138,21 @@ export const InvestorsTable: React.FC<InvestorsTableProps> = ({
       {/* Table */}
       <div className="overflow-x-auto flex-1">
         {investors.length === 0 ? (
-          <div className="py-8 text-center text-slate-400 text-xs font-semibold bg-slate-50/50 rounded-xl border border-dashed border-slate-200">
+          <div className="py-8 text-center text-slate-400 text-xs font-semibold bg-slate-950/40 rounded-xl border border-dashed border-cyan-500/30">
             No investors listed yet. Click "+ Add Investor" to add one.
           </div>
         ) : (
           <table className="w-full text-left text-xs sm:text-sm">
             <thead>
-              <tr className="border-b border-slate-200 text-slate-500 font-semibold select-none">
-                <th className="py-2 px-2 w-8 text-center">#</th>
-                <th className="py-2 px-2">Investor Name</th>
-                <th className="py-2 px-2 text-center">Type</th>
-                <th className="py-2 px-2 text-right">Investment (₹ Lakh)</th>
-                {canEdit && <th className="py-2 px-1 w-16 text-center">Actions</th>}
+              <tr className="border-b border-cyan-500/30 text-cyan-300 font-semibold select-none">
+                <th className="py-2.5 px-2 w-8 text-center">#</th>
+                <th className="py-2.5 px-2">Investor Name</th>
+                <th className="py-2.5 px-2 text-center">Type</th>
+                <th className="py-2.5 px-2 text-right">Investment (₹ Lakh)</th>
+                {canEdit && <th className="py-2.5 px-1 w-16 text-center">Actions</th>}
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
+            <tbody className="divide-y divide-slate-800/60 font-medium text-slate-200">
               {investors.map((inv) => {
                 const isEditingThis = editingId === inv.id;
                 const isNRI = inv.type.includes('NRI') || inv.type.includes('VC');
@@ -160,40 +160,40 @@ export const InvestorsTable: React.FC<InvestorsTableProps> = ({
                 return (
                   <tr
                     key={inv.id}
-                    className="hover:bg-slate-50/80 transition-colors group"
+                    className="hover:bg-cyan-950/30 transition-colors group"
                   >
-                    <td className="py-2 px-2 text-center text-slate-400 font-semibold">
+                    <td className="py-2.5 px-2 text-center text-slate-400 font-semibold">
                       {inv.rank}
                     </td>
 
-                    <td className="py-2 px-2">
+                    <td className="py-2.5 px-2">
                       {isEditingThis ? (
                         <input
                           type="text"
                           value={editName}
                           onChange={(e) => setEditName(e.target.value)}
-                          className="px-2 py-1 bg-white border border-blue-400 rounded text-xs w-full"
+                          className="px-2 py-1 bg-slate-950 border border-cyan-400 rounded text-xs w-full text-slate-100"
                           autoFocus
                         />
                       ) : (
-                        <span className="text-slate-800 font-semibold">{inv.name}</span>
+                        <span className="text-slate-100 font-semibold">{inv.name}</span>
                       )}
                     </td>
 
-                    <td className="py-2 px-2 text-center">
+                    <td className="py-2.5 px-2 text-center">
                       {isEditingThis ? (
                         <input
                           type="text"
                           value={editType}
                           onChange={(e) => setEditType(e.target.value)}
-                          className="px-2 py-1 bg-white border border-blue-400 rounded text-xs w-28 text-center"
+                          className="px-2 py-1 bg-slate-950 border border-cyan-400 rounded text-xs w-28 text-center text-slate-100"
                         />
                       ) : (
                         <span
                           className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
                             isNRI
-                              ? 'bg-purple-100/70 text-purple-800 border border-purple-200'
-                              : 'bg-emerald-100/70 text-emerald-800 border border-emerald-200'
+                              ? 'bg-purple-900/60 text-purple-300 border border-purple-500/40'
+                              : 'bg-emerald-900/60 text-emerald-300 border border-emerald-500/40'
                           }`}
                         >
                           {inv.type}
@@ -201,36 +201,36 @@ export const InvestorsTable: React.FC<InvestorsTableProps> = ({
                       )}
                     </td>
 
-                    <td className="py-2 px-2 text-right">
+                    <td className="py-2.5 px-2 text-right">
                       {isEditingThis ? (
                         <input
                           type="number"
                           step="0.1"
                           value={editAmount}
                           onChange={(e) => setEditAmount(e.target.value)}
-                          className="px-2 py-1 bg-white border border-blue-400 rounded text-xs w-20 text-right"
+                          className="px-2 py-1 bg-slate-950 border border-cyan-400 rounded text-xs w-20 text-right text-slate-100"
                         />
                       ) : (
-                        <span className="font-bold text-slate-900 tracking-tight">
+                        <span className="font-bold text-cyan-300 tracking-tight">
                           {inv.investmentLakh.toFixed(2)}
                         </span>
                       )}
                     </td>
 
                     {canEdit && (
-                      <td className="py-2 px-1 text-center">
+                      <td className="py-2.5 px-1 text-center">
                         {isEditingThis ? (
                           <div className="flex items-center justify-center gap-1">
                             <button
                               onClick={() => saveEdit(inv.id)}
-                              className="p-1 text-emerald-600 hover:text-emerald-700"
+                              className="p-1 text-emerald-400 hover:text-emerald-300"
                               title="Save"
                             >
                               <Check className="w-3.5 h-3.5" />
                             </button>
                             <button
                               onClick={() => setEditingId(null)}
-                              className="p-1 text-slate-400 hover:text-slate-600"
+                              className="p-1 text-slate-400 hover:text-slate-200"
                               title="Cancel"
                             >
                               <X className="w-3.5 h-3.5" />
@@ -240,18 +240,18 @@ export const InvestorsTable: React.FC<InvestorsTableProps> = ({
                           <div className="flex items-center justify-center gap-1">
                             <button
                               onClick={() => startEdit(inv)}
-                              className="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-blue-600 transition-opacity"
+                              className="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-cyan-300 transition-opacity"
                               title="Edit investor"
                             >
-                              <Edit2 className="w-3 h-3" />
+                              <Edit2 className="w-3.5 h-3.5" />
                             </button>
                             {onDeleteInvestor && (
                               <button
                                 onClick={() => handleDelete(inv.id, inv.name)}
-                                className="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-red-600 transition-opacity"
+                                className="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-red-400 transition-opacity"
                                 title="Remove investor"
                               >
-                                <Trash2 className="w-3 h-3" />
+                                <Trash2 className="w-3.5 h-3.5" />
                               </button>
                             )}
                           </div>
@@ -263,10 +263,10 @@ export const InvestorsTable: React.FC<InvestorsTableProps> = ({
               })}
             </tbody>
             <tfoot>
-              <tr className="border-t-2 border-slate-200 bg-slate-50/70 font-bold text-slate-900">
+              <tr className="border-t-2 border-cyan-500/30 bg-slate-950/60 font-bold text-slate-100">
                 <td className="py-2.5 px-2 text-center text-slate-400"></td>
-                <td colSpan={2} className="py-2.5 px-2">Total Investment</td>
-                <td className="py-2.5 px-2 text-right tracking-tight text-blue-700 text-sm sm:text-base font-extrabold">
+                <td colSpan={2} className="py-2.5 px-2 text-slate-300">Total Investment</td>
+                <td className="py-2.5 px-2 text-right tracking-tight text-cyan-400 text-sm sm:text-base font-extrabold">
                   ₹{totalInvestmentLakh.toFixed(2)} Lakh
                 </td>
                 {canEdit && <td></td>}

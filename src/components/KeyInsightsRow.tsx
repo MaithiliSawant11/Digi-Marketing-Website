@@ -43,17 +43,17 @@ export const KeyInsightsRow: React.FC<KeyInsightsRowProps> = ({
   const isPositiveGrowth = insights.salesGrowthPct >= 0;
 
   return (
-    <div className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-2xs">
-      <div className="flex items-center justify-between mb-3.5">
+    <div className="bg-slate-900/85 backdrop-blur-md rounded-2xl p-5 border border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.12)] text-slate-100">
+      <div className="flex items-center justify-between mb-3.5 border-b border-cyan-500/20 pb-3">
         <div className="flex items-center gap-2">
-          <div className="w-5 h-5 flex items-center justify-center text-slate-700">
+          <div className="w-5 h-5 flex items-center justify-center text-cyan-400">
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path>
               <path d="M9 18h6"></path>
               <path d="M10 22h4"></path>
             </svg>
           </div>
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
+          <h2 className="text-base sm:text-lg font-bold text-cyan-300 tracking-tight">
             Key Insights
           </h2>
         </div>
@@ -61,7 +61,7 @@ export const KeyInsightsRow: React.FC<KeyInsightsRowProps> = ({
         {canEdit && (
           <button
             onClick={() => setIsEditing(true)}
-            className="text-xs font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-1 hover:underline"
+            className="text-xs font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1 hover:underline"
           >
             <Edit3 className="w-3.5 h-3.5" />
             <span>Edit Insights</span>
@@ -72,85 +72,85 @@ export const KeyInsightsRow: React.FC<KeyInsightsRowProps> = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5">
         
         {/* 1. Total Sales Growth */}
-        <div className="bg-[#edfbf4] border border-[#b8ecd2] rounded-xl p-3.5 flex items-start gap-3">
-          <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${isPositiveGrowth ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>
+        <div className="bg-slate-950/70 border border-emerald-500/30 rounded-xl p-3.5 flex items-start gap-3">
+          <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${isPositiveGrowth ? 'bg-emerald-950 text-emerald-400 border border-emerald-500/30' : 'bg-rose-950 text-rose-400 border border-rose-500/30'}`}>
             {isPositiveGrowth ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
           </div>
           <div>
-            <div className="text-[11px] font-semibold text-slate-600 leading-tight">
+            <div className="text-[11px] font-bold text-slate-400 leading-tight">
               Total Sales Growth
             </div>
-            <div className="text-base sm:text-lg font-black text-slate-900 tracking-tight mt-1">
+            <div className="text-base sm:text-lg font-black text-emerald-400 tracking-tight mt-1">
               {isPositiveGrowth ? `+${insights.salesGrowthPct}%` : `${insights.salesGrowthPct}%`}
             </div>
-            <div className="text-[10px] text-slate-500 font-medium">
+            <div className="text-[10px] text-slate-400 font-medium">
               {insights.salesGrowthNote || 'Pacing'}
             </div>
           </div>
         </div>
 
         {/* 2. Best Performing Category */}
-        <div className="bg-[#f5efff] border border-[#d9c4fb] rounded-xl p-3.5 flex items-start gap-3">
-          <div className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center text-purple-700 shrink-0">
-            <Star className="w-4 h-4 fill-purple-600/30" />
+        <div className="bg-slate-950/70 border border-purple-500/30 rounded-xl p-3.5 flex items-start gap-3">
+          <div className="w-8 h-8 rounded-lg bg-purple-950 border border-purple-500/30 flex items-center justify-center text-purple-400 shrink-0">
+            <Star className="w-4 h-4 fill-purple-400/30" />
           </div>
           <div>
-            <div className="text-[11px] font-semibold text-slate-600 leading-tight">
+            <div className="text-[11px] font-bold text-slate-400 leading-tight">
               Best Performing Category
             </div>
-            <div className="text-sm sm:text-base font-black text-slate-900 tracking-tight mt-1 truncate">
+            <div className="text-sm sm:text-base font-black text-purple-300 tracking-tight mt-1 truncate">
               {insights.bestCategoryName}
             </div>
-            <div className="text-[10px] text-slate-500 font-medium">
+            <div className="text-[10px] text-slate-400 font-medium">
               {insights.bestCategoryNote}
             </div>
           </div>
         </div>
 
         {/* 3. Top Product */}
-        <div className="bg-[#fff0f4] border border-[#fcc8d5] rounded-xl p-3.5 flex items-start gap-3">
-          <div className="w-8 h-8 rounded-lg bg-pink-100 flex items-center justify-center text-pink-700 shrink-0">
+        <div className="bg-slate-950/70 border border-pink-500/30 rounded-xl p-3.5 flex items-start gap-3">
+          <div className="w-8 h-8 rounded-lg bg-pink-950 border border-pink-500/30 flex items-center justify-center text-pink-400 shrink-0">
             <Crown className="w-4 h-4" />
           </div>
           <div>
-            <div className="text-[11px] font-semibold text-slate-600 leading-tight">
+            <div className="text-[11px] font-bold text-slate-400 leading-tight">
               Top Product
             </div>
-            <div className="text-sm sm:text-base font-black text-slate-900 tracking-tight mt-1 truncate">
+            <div className="text-sm sm:text-base font-black text-pink-300 tracking-tight mt-1 truncate">
               {insights.topProductName}
             </div>
-            <div className="text-[10px] text-slate-500 font-medium">
+            <div className="text-[10px] text-slate-400 font-medium">
               {insights.topProductNote}
             </div>
           </div>
         </div>
 
         {/* 4. Monthly Average Revenue */}
-        <div className="bg-[#eef6ff] border border-[#c2defd] rounded-xl p-3.5 flex items-start gap-3">
-          <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-700 shrink-0">
+        <div className="bg-slate-950/70 border border-cyan-500/30 rounded-xl p-3.5 flex items-start gap-3">
+          <div className="w-8 h-8 rounded-lg bg-cyan-950 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
             <BarChart2 className="w-4 h-4" />
           </div>
           <div>
-            <div className="text-[11px] font-semibold text-slate-600 leading-tight">
+            <div className="text-[11px] font-bold text-slate-400 leading-tight">
               Monthly Average Revenue
             </div>
-            <div className="text-base sm:text-lg font-black text-slate-900 tracking-tight mt-1">
+            <div className="text-base sm:text-lg font-black text-cyan-300 tracking-tight mt-1">
               {insights.monthlyAvgRevenue}
             </div>
           </div>
         </div>
 
         {/* 5. Total Investors */}
-        <div className="bg-[#fef4ed] border border-[#fed6ba] rounded-xl p-3.5 flex items-start gap-3">
-          <div className="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center text-orange-700 shrink-0">
+        <div className="bg-slate-950/70 border border-amber-500/30 rounded-xl p-3.5 flex items-start gap-3">
+          <div className="w-8 h-8 rounded-lg bg-amber-950 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
             <Users className="w-4 h-4" />
           </div>
           <div>
-            <div className="text-[11px] font-semibold text-slate-600 leading-tight">
+            <div className="text-[11px] font-bold text-slate-400 leading-tight">
               Total Investors
             </div>
-            <div className="text-base sm:text-lg font-black text-slate-900 tracking-tight mt-1">
-              {totalInvestors} <span className="text-xs font-semibold text-slate-600">(INR + NRI)</span>
+            <div className="text-base sm:text-lg font-black text-amber-300 tracking-tight mt-1">
+              {totalInvestors} <span className="text-xs font-semibold text-slate-400">(INR + NRI)</span>
             </div>
           </div>
         </div>

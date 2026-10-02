@@ -49,13 +49,13 @@ export const RevenueShareDonut: React.FC<RevenueShareDonutProps> = ({ shares, to
   });
 
   return (
-    <div className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-2xs">
-      <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight mb-4">
-        Revenue Share <span className="text-slate-500 font-normal text-sm sm:text-base">(By Category)</span>
+    <div className="bg-slate-900/85 backdrop-blur-md rounded-2xl p-5 border border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.12)] text-slate-100">
+      <h2 className="text-base sm:text-lg font-bold text-cyan-300 tracking-tight mb-4">
+        Revenue Share <span className="text-slate-400 font-normal text-sm sm:text-base">(By Category)</span>
       </h2>
 
       {activeShares.length === 0 ? (
-        <div className="py-8 text-center text-slate-400 text-xs font-semibold bg-slate-50/50 rounded-xl border border-dashed border-slate-200">
+        <div className="py-8 text-center text-slate-400 text-xs font-semibold bg-slate-950/40 rounded-xl border border-dashed border-cyan-500/20">
           No category revenue data recorded yet. Add products to view dynamic category share breakdown.
         </div>
       ) : (
@@ -94,7 +94,7 @@ export const RevenueShareDonut: React.FC<RevenueShareDonutProps> = ({ shares, to
                       top: `${(slice.labelY / size) * 100}%`,
                       transform: 'translate(-50%, -50%)',
                     }}
-                    className="text-[10px] sm:text-[11px] font-bold text-slate-800 drop-shadow-xs"
+                    className="text-[10px] sm:text-[11px] font-black text-slate-950 drop-shadow-md"
                   >
                     {slice.percentage}%
                   </div>
@@ -104,7 +104,7 @@ export const RevenueShareDonut: React.FC<RevenueShareDonutProps> = ({ shares, to
 
             {/* Center Hole Content (Total Revenue) */}
             <div className="absolute flex flex-col items-center justify-center text-center">
-              <span className="text-xs font-semibold text-slate-500 leading-tight select-none">
+              <span className="text-xs font-semibold text-slate-400 leading-tight select-none">
                 Total Revenue
               </span>
               {isEditing ? (
@@ -120,7 +120,7 @@ export const RevenueShareDonut: React.FC<RevenueShareDonutProps> = ({ shares, to
                     value={customTotal}
                     onChange={(e) => setCustomTotal(e.target.value)}
                     placeholder={liveTotal.toString()}
-                    className="w-28 text-center text-xs font-bold px-1.5 py-0.5 border border-blue-500 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white"
+                    className="w-28 text-center text-xs font-bold px-1.5 py-0.5 border border-cyan-400 rounded-md focus:outline-none focus:ring-1 focus:ring-cyan-400 bg-slate-900 text-slate-100"
                     autoFocus
                     onBlur={() => setIsEditing(false)}
                   />
@@ -130,7 +130,7 @@ export const RevenueShareDonut: React.FC<RevenueShareDonutProps> = ({ shares, to
                   type="button"
                   onClick={() => setIsEditing(true)}
                   title="Click to manually edit total revenue or let auto-sync"
-                  className="text-xs sm:text-sm font-black text-slate-900 tracking-tight leading-tight mt-0.5 hover:text-blue-600 transition-colors focus:outline-none px-1 py-0.5 rounded hover:bg-slate-100/60"
+                  className="text-xs sm:text-sm font-black text-cyan-300 tracking-tight leading-tight mt-0.5 hover:text-cyan-200 transition-colors focus:outline-none px-1 py-0.5 rounded hover:bg-cyan-950/60"
                 >
                   {formatINR(displayVal)}
                 </button>

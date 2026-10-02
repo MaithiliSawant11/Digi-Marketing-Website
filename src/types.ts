@@ -7,6 +7,8 @@ export interface User {
   role: UserRole;
   clientId: string;
   avatarUrl?: string;
+  passwordHash?: string;
+  password?: string;
 }
 
 export interface ClientAccount {
@@ -40,6 +42,7 @@ export interface ProductItem {
   rank: number;
   name: string;
   revenue: number; // in rupees, e.g. 650000
+  quantity: number; // Units sold (default 1)
   category?: string;
 }
 

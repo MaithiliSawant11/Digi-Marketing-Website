@@ -99,29 +99,29 @@ export const MonthlyRevenueChart: React.FC<MonthlyRevenueChartProps> = ({
   const displayYears = Array.from(new Set([...availableYears, ...futureYears])).sort((a: number, b: number) => a - b);
 
   return (
-    <div className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-2xs">
+    <div className="bg-slate-900/85 backdrop-blur-md rounded-2xl p-5 border border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.12)] text-slate-100">
       
       {/* Top Header & View Controls */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 border-b border-slate-100 pb-3">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 border-b border-cyan-500/20 pb-3">
         <div>
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight flex items-center gap-2">
-            <BarChart2 className="w-5 h-5 text-blue-600 shrink-0" />
+          <h2 className="text-base sm:text-lg font-bold text-cyan-300 tracking-tight flex items-center gap-2">
+            <BarChart2 className="w-5 h-5 text-cyan-400 shrink-0" />
             <span>Revenue Generation Analytics</span>
           </h2>
-          <p className="text-xs text-slate-500 font-medium mt-0.5">
-            Breakdown Flow: <strong className="text-blue-700">Daily → Monthly → Yearly</strong>
+          <p className="text-xs text-slate-400 font-medium mt-0.5">
+            Breakdown Flow: <strong className="text-cyan-400">Daily → Monthly → Yearly</strong>
           </p>
         </div>
 
         {/* View Mode Selector Tabs */}
-        <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
+        <div className="flex items-center gap-1 bg-slate-950/90 p-1 rounded-xl border border-cyan-500/30">
           <button
             type="button"
             onClick={() => setViewMode('daily')}
             className={`px-3 py-1.5 text-xs font-extrabold rounded-lg transition-all ${
               viewMode === 'daily'
-                ? 'bg-white text-blue-700 shadow-xs ring-1 ring-slate-200'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-cyan-500 text-slate-950 shadow-[0_0_10px_rgba(6,182,212,0.5)]'
+                : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             Daily View
@@ -131,8 +131,8 @@ export const MonthlyRevenueChart: React.FC<MonthlyRevenueChartProps> = ({
             onClick={() => setViewMode('monthly')}
             className={`px-3 py-1.5 text-xs font-extrabold rounded-lg transition-all ${
               viewMode === 'monthly'
-                ? 'bg-white text-blue-700 shadow-xs ring-1 ring-slate-200'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-cyan-500 text-slate-950 shadow-[0_0_10px_rgba(6,182,212,0.5)]'
+                : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             Monthly View
@@ -142,8 +142,8 @@ export const MonthlyRevenueChart: React.FC<MonthlyRevenueChartProps> = ({
             onClick={() => setViewMode('yearly')}
             className={`px-3 py-1.5 text-xs font-extrabold rounded-lg transition-all ${
               viewMode === 'yearly'
-                ? 'bg-white text-purple-700 shadow-xs ring-1 ring-slate-200'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-purple-500 text-slate-950 shadow-[0_0_10px_rgba(168,85,247,0.5)]'
+                : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             Yearly View
@@ -152,28 +152,28 @@ export const MonthlyRevenueChart: React.FC<MonthlyRevenueChartProps> = ({
       </div>
 
       {/* Date & Filter Calendar Controls */}
-      <div className="flex items-center justify-between gap-3 mb-4 bg-slate-50 p-2.5 rounded-xl border border-slate-200/80 flex-wrap">
+      <div className="flex items-center justify-between gap-3 mb-4 bg-slate-950/60 p-2.5 rounded-xl border border-cyan-500/30 flex-wrap">
         {viewMode === 'daily' && (
-          <div className="flex items-center gap-2 text-xs font-bold text-slate-700">
-            <Calendar className="w-4 h-4 text-blue-600 shrink-0" />
+          <div className="flex items-center gap-2 text-xs font-bold text-cyan-300">
+            <Calendar className="w-4 h-4 text-cyan-400 shrink-0" />
             <span>Select Month Calendar:</span>
             <input
               type="month"
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
-              className="px-2.5 py-1 bg-white border border-slate-300 rounded-lg text-xs font-bold text-slate-900 focus:ring-2 focus:ring-blue-500"
+              className="px-2.5 py-1 bg-slate-900 border border-cyan-500/40 rounded-lg text-xs font-bold text-slate-100 focus:ring-2 focus:ring-cyan-400"
             />
           </div>
         )}
 
         {viewMode === 'monthly' && (
-          <div className="flex items-center gap-2 text-xs font-bold text-slate-700">
-            <Filter className="w-4 h-4 text-blue-600 shrink-0" />
+          <div className="flex items-center gap-2 text-xs font-bold text-cyan-300">
+            <Filter className="w-4 h-4 text-cyan-400 shrink-0" />
             <span>Filter Year:</span>
             <select
               value={selectedYear}
               onChange={(e) => setSelectedYear(e.target.value)}
-              className="px-2.5 py-1 bg-white border border-slate-300 rounded-lg text-xs font-bold text-slate-900 focus:ring-2 focus:ring-blue-500"
+              className="px-2.5 py-1 bg-slate-900 border border-cyan-500/40 rounded-lg text-xs font-bold text-slate-100 focus:ring-2 focus:ring-cyan-400"
             >
               <option value="all">All Recorded Years</option>
               {displayYears.map((yr) => (
@@ -186,8 +186,8 @@ export const MonthlyRevenueChart: React.FC<MonthlyRevenueChartProps> = ({
         )}
 
         {viewMode === 'yearly' && (
-          <div className="text-xs font-semibold text-purple-700 flex items-center gap-1.5">
-            <TrendingUp className="w-4 h-4 text-purple-600" />
+          <div className="text-xs font-semibold text-purple-300 flex items-center gap-1.5">
+            <TrendingUp className="w-4 h-4 text-purple-400" />
             <span>Annual Revenue Comparison across FY periods</span>
           </div>
         )}
@@ -196,7 +196,7 @@ export const MonthlyRevenueChart: React.FC<MonthlyRevenueChartProps> = ({
           <button
             type="button"
             onClick={onOpenDailyUpdate}
-            className="text-xs font-bold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-lg border border-blue-200 ml-auto transition-colors"
+            className="text-xs font-bold text-cyan-300 hover:text-cyan-200 bg-cyan-950/60 hover:bg-cyan-900/80 px-3 py-1.5 rounded-lg border border-cyan-500/40 ml-auto transition-all shadow-[0_0_8px_rgba(6,182,212,0.2)]"
           >
             + Select Date & Add Sales
           </button>
@@ -206,8 +206,8 @@ export const MonthlyRevenueChart: React.FC<MonthlyRevenueChartProps> = ({
       {/* Chart Graphic Area */}
       <div className="relative pt-6 pb-2">
         {activeItems.length === 0 ? (
-          <div className="h-56 flex flex-col items-center justify-center text-center p-4 bg-slate-50/50 rounded-xl border border-dashed border-slate-200">
-            <p className="text-xs font-bold text-slate-600">
+          <div className="h-56 flex flex-col items-center justify-center text-center p-4 bg-slate-950/40 rounded-xl border border-dashed border-cyan-500/20">
+            <p className="text-xs font-bold text-slate-300">
               {viewMode === 'daily'
                 ? `No daily sales logged for ${selectedMonth} yet.`
                 : 'No sales records found for this view filter.'}
@@ -219,7 +219,7 @@ export const MonthlyRevenueChart: React.FC<MonthlyRevenueChartProps> = ({
         ) : (
           <div className="flex">
             {/* Y Axis Labels */}
-            <div className="w-16 sm:w-20 shrink-0 flex flex-col justify-between text-[11px] sm:text-xs font-semibold text-slate-500 h-56 pr-2 text-right select-none">
+            <div className="w-16 sm:w-20 shrink-0 flex flex-col justify-between text-[11px] sm:text-xs font-semibold text-cyan-400/80 h-56 pr-2 text-right select-none">
               {yTicks.map((val) => (
                 <span key={val} className="leading-none">
                   {formatINR(val)}
@@ -236,7 +236,7 @@ export const MonthlyRevenueChart: React.FC<MonthlyRevenueChartProps> = ({
                   <div
                     key={val}
                     style={{ top: `${topPct}%` }}
-                    className="absolute left-0 right-0 border-b border-slate-100 -z-0"
+                    className="absolute left-0 right-0 border-b border-cyan-500/10 -z-0"
                   />
                 );
               })}

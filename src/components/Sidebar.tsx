@@ -39,20 +39,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
   ];
 
   return (
-    <aside className="w-full md:w-56 lg:w-60 bg-white md:bg-transparent shrink-0 flex flex-col justify-between p-3 sm:p-4 border-r md:border-r-0 border-slate-200">
+    <aside className="w-full md:w-56 lg:w-60 bg-slate-900/85 backdrop-blur-md shrink-0 flex flex-col justify-between p-3 sm:p-4 rounded-2xl border border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.12)] text-slate-100">
       <div className="space-y-4">
         
         {/* Client Workspace Selector */}
-        <div className="bg-white rounded-xl p-2.5 border border-slate-200 shadow-2xs">
-          <div className="text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1 px-1 flex items-center justify-between">
+        <div className="bg-slate-900/90 rounded-xl p-2.5 border border-cyan-500/30 shadow-inner">
+          <div className="text-[10px] uppercase font-bold tracking-wider text-cyan-400 mb-1 px-1 flex items-center justify-between">
             <span>Client Workspace</span>
-            <Layers className="w-3 h-3 text-blue-500" />
+            <Layers className="w-3 h-3 text-cyan-400" />
           </div>
           <select
             value={activeClientId}
             onChange={(e) => onSelectClient(e.target.value)}
             aria-label="Select Client Workspace"
-            className="w-full text-xs font-semibold text-slate-800 bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
+            className="w-full text-xs font-semibold text-slate-100 bg-slate-950 border border-cyan-500/30 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-cyan-400 cursor-pointer"
           >
             {clients.map((c) => (
               <option key={c.id} value={c.id}>
@@ -62,7 +62,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </select>
         </div>
 
-        {/* Navigation Items (Exact as pictured in image) */}
+        {/* Navigation Items */}
         <nav className="space-y-1.5">
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -73,11 +73,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onClick={() => onTabChange(item.id)}
                 className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all text-left ${
                   isActive
-                    ? 'bg-blue-50 text-blue-600 shadow-2xs'
-                    : 'text-slate-600 hover:bg-white/80 hover:text-slate-900'
+                    ? 'bg-cyan-950/80 text-cyan-300 border border-cyan-500/40 shadow-[0_0_10px_rgba(6,182,212,0.2)]'
+                    : 'text-slate-300 hover:bg-slate-800/80 hover:text-cyan-200'
                 }`}
               >
-                <div className={`p-1 rounded-md ${isActive ? 'bg-blue-100 text-blue-600' : 'text-slate-400'}`}>
+                <div className={`p-1 rounded-md ${isActive ? 'bg-cyan-900/90 text-cyan-300' : 'text-slate-400'}`}>
                   <Icon className="w-4 h-4" />
                 </div>
                 <span>{item.label}</span>
@@ -90,16 +90,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onClick={() => onTabChange('admin')}
               className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all text-left ${
                 activeTab === 'admin'
-                  ? 'bg-indigo-50 text-indigo-700 shadow-2xs border border-indigo-200/60'
-                  : 'text-slate-600 hover:bg-white/80 hover:text-slate-900'
+                  ? 'bg-purple-950/80 text-purple-300 border border-purple-500/40 shadow-[0_0_10px_rgba(168,85,247,0.2)]'
+                  : 'text-slate-300 hover:bg-slate-800/80 hover:text-purple-300'
               }`}
             >
-              <div className={`p-1 rounded-md ${activeTab === 'admin' ? 'bg-indigo-100 text-indigo-700' : 'text-slate-400'}`}>
+              <div className={`p-1 rounded-md ${activeTab === 'admin' ? 'bg-purple-900/90 text-purple-300' : 'text-slate-400'}`}>
                 <ShieldCheck className="w-4 h-4" />
               </div>
               <div className="flex flex-col">
                 <span>Admin Console</span>
-                <span className="text-[10px] font-normal text-slate-400">APIs, Audit, Emails</span>
+                <span className="text-[10px] font-normal text-slate-400">APIs, Audit, Security</span>
               </div>
             </button>
           </div>

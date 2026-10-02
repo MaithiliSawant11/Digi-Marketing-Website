@@ -34,22 +34,22 @@ export const InvestorsView: React.FC<InvestorsViewProps> = ({
     <div className="space-y-6">
       {/* Portfolio Breakdown KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs">
-          <div className="text-xs font-semibold text-slate-500">Total Investment Pool</div>
-          <div className="text-2xl font-black text-slate-900 mt-1">₹{totalLakh.toFixed(2)} Lakh</div>
-          <div className="text-xs text-blue-600 font-semibold mt-1">{investors.length} Active Stakeholders</div>
+        <div className="bg-slate-900/80 backdrop-blur-md p-4 rounded-2xl border border-cyan-500/30 shadow-lg">
+          <div className="text-xs font-semibold text-cyan-400">Total Investment Pool</div>
+          <div className="text-2xl font-black text-cyan-300 mt-1">₹{totalLakh.toFixed(2)} Lakh</div>
+          <div className="text-xs text-cyan-400 font-semibold mt-1">{investors.length} Active Stakeholders</div>
         </div>
 
-        <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs">
-          <div className="text-xs font-semibold text-slate-500">NRI Capital Inflow</div>
-          <div className="text-2xl font-black text-purple-700 mt-1">₹{nriAmount.toFixed(2)} Lakh</div>
-          <div className="text-xs text-slate-500 font-semibold mt-1">{nriCount} Partners (UAE, USA, UK, etc.)</div>
+        <div className="bg-slate-900/80 backdrop-blur-md p-4 rounded-2xl border border-cyan-500/30 shadow-lg">
+          <div className="text-xs font-semibold text-purple-300">NRI Capital Inflow</div>
+          <div className="text-2xl font-black text-purple-400 mt-1">₹{nriAmount.toFixed(2)} Lakh</div>
+          <div className="text-xs text-purple-300 font-semibold mt-1">{nriCount} Partners (UAE, USA, UK, etc.)</div>
         </div>
 
-        <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs">
-          <div className="text-xs font-semibold text-slate-500">Domestic Indian Capital</div>
-          <div className="text-2xl font-black text-emerald-700 mt-1">₹{indianAmount.toFixed(2)} Lakh</div>
-          <div className="text-xs text-slate-500 font-semibold mt-1">{indianCount} Domestic Angels</div>
+        <div className="bg-slate-900/80 backdrop-blur-md p-4 rounded-2xl border border-cyan-500/30 shadow-lg">
+          <div className="text-xs font-semibold text-emerald-300">Domestic Indian Capital</div>
+          <div className="text-2xl font-black text-emerald-400 mt-1">₹{indianAmount.toFixed(2)} Lakh</div>
+          <div className="text-xs text-emerald-300 font-semibold mt-1">{indianCount} Domestic Angels</div>
         </div>
       </div>
 

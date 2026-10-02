@@ -112,39 +112,83 @@ async function startServer() {
     res.json({ user: db.currentUser });
   });
 
+  // Auth: Signup (Register New Account)
+  app.post('/api/auth/signup', (req, res) => {
+    const { name, email, password, role } = req.body;
+    if (!name || !email || !password) {
+      return res.status(400).json({ error: 'Name, email, and password are required.' });
+    }
+    if (password.length < 4) {
+      return res.status(400).json({ error: 'Password must be at least 4 characters long.' });
+    }
+    const cleanEmail = email.trim().toLowerCase();
+    const existing = db.users.find(u => u.email.toLowerCase() === cleanEmail);
+    if (existing) {
+      return res.status(400).json({ error: 'An account with this email address already exists.' });
+    }
+
+    const targetRole = (role === 'investor' ? 'investor' : 'admin');
+    const newUser: User = {
+      id: `user-${Date.now()}`,
+      name: name.trim(),
+      email: cleanEmail,
+      role: targetRole,
+      clientId: db.clients[0]?.id || 'client-apex',
+      password: password,
+    };
+
+    db.users.push(newUser);
+    db.currentUser = newUser;
+    if (targetRole === 'admin') {
+      db.adminPassword = password;
+    }
+
+    addAuditLog('AUTH_SIGNUP', newUser.name, newUser.role, `Registered new ${newUser.role} account (${cleanEmail})`);
+    saveDatabase(db);
+    res.json({ success: true, user: newUser, token: `jwt-token-${newUser.id}` });
+  });
+
   // Auth: Login / Switch User
   app.post('/api/auth/login', (req, res) => {
     const { email, password, role } = req.body;
     const targetRole = role || 'admin';
+    const cleanEmail = email ? email.trim().toLowerCase() : '';
 
-    if (targetRole === 'admin') {
-      const activeAdminPass = db.adminPassword || 'admin123';
-      if (password !== activeAdminPass) {
+    let matchedUser = db.users.find(u => u.email.toLowerCase() === cleanEmail);
+    
+    if (targetRole === 'admin' || (matchedUser && matchedUser.role === 'admin')) {
+      const activeAdminPass = matchedUser?.password || db.adminPassword || 'admin123';
+      if (password !== activeAdminPass && password !== db.adminPassword) {
         return res.status(401).json({ error: 'Invalid password for Admin account.' });
+      }
+    } else if (matchedUser && matchedUser.password) {
+      if (password !== matchedUser.password) {
+        return res.status(401).json({ error: 'Invalid password for account.' });
       }
     }
 
-    let target = db.users.find(u => u.email === email);
-    if (!target) {
-      target = db.users.find(u => u.role === targetRole);
+    if (!matchedUser) {
+      matchedUser = db.users.find(u => u.role === targetRole);
     }
-    if (!target) {
-      target = {
+    if (!matchedUser) {
+      matchedUser = {
         id: `user-${Date.now()}`,
-        name: email ? email.split('@')[0] : 'Admin Manager',
-        email: email || 'admin@dashboard.com',
+        name: cleanEmail ? cleanEmail.split('@')[0] : 'Admin Manager',
+        email: cleanEmail || 'admin@dashboard.com',
         role: targetRole as any,
         clientId: db.clients[0]?.id || 'client-apex',
+        password: password || 'admin123',
       };
-      db.users.push(target);
+      db.users.push(matchedUser);
     } else {
-      if (email) target.email = email;
+      if (cleanEmail) matchedUser.email = cleanEmail;
+      if (password) matchedUser.password = password;
     }
 
-    db.currentUser = target;
-    addAuditLog('AUTH_LOGIN', target.name, target.role, `Signed in successfully as ${target.role}`);
+    db.currentUser = matchedUser;
+    addAuditLog('AUTH_LOGIN', matchedUser.name, matchedUser.role, `Signed in successfully as ${matchedUser.role}`);
     saveDatabase(db);
-    res.json({ success: true, user: target, token: `jwt-token-${target.id}` });
+    res.json({ success: true, user: matchedUser, token: `jwt-token-${matchedUser.id}` });
   });
 
   // Auth: Switch role
@@ -153,8 +197,8 @@ async function startServer() {
     const targetRole = role || 'admin';
 
     if (targetRole === 'admin' && db.currentUser.role !== 'admin') {
-      const activeAdminPass = db.adminPassword || 'admin123';
-      if (password !== activeAdminPass) {
+      const activeAdminPass = db.currentUser.password || db.adminPassword || 'admin123';
+      if (password !== activeAdminPass && password !== db.adminPassword) {
         return res.status(401).json({ error: 'Password required to switch to Admin role.' });
       }
     }
@@ -173,20 +217,22 @@ async function startServer() {
   // Auth: Change Admin Password
   app.post('/api/auth/change-password', (req, res) => {
     const { currentPassword, newPassword } = req.body;
-    if (db.currentUser.role !== 'admin') {
-      return res.status(403).json({ error: 'Only Admin users can change the Admin password.' });
-    }
-    const activeAdminPass = db.adminPassword || 'admin123';
-    if (currentPassword !== activeAdminPass) {
+    const activeAdminPass = db.currentUser.password || db.adminPassword || 'admin123';
+    
+    if (currentPassword !== activeAdminPass && currentPassword !== db.adminPassword) {
       return res.status(401).json({ error: 'Incorrect current password.' });
     }
     if (!newPassword || newPassword.length < 4) {
       return res.status(400).json({ error: 'New password must be at least 4 characters long.' });
     }
-    db.adminPassword = newPassword;
-    addAuditLog('ADMIN_PASSWORD_CHANGED', db.currentUser.name, db.currentUser.role, 'Admin password updated successfully');
+    
+    db.currentUser.password = newPassword;
+    if (db.currentUser.role === 'admin') {
+      db.adminPassword = newPassword;
+    }
+    addAuditLog('ADMIN_PASSWORD_CHANGED', db.currentUser.name, db.currentUser.role, 'User account password updated successfully');
     saveDatabase(db);
-    res.json({ success: true, message: 'Admin password updated successfully.' });
+    res.json({ success: true, message: 'Password updated successfully.' });
   });
 
   // Auth: Update profile
@@ -447,12 +493,13 @@ function recalculateMetrics(dash: DashboardData) {
   // Dashboard: Product CRUD
   app.put('/api/dashboard/products/:id', requireAdmin, (req, res) => {
     const id = Number(req.params.id);
-    const { name, revenue, category } = req.body;
+    const { name, revenue, quantity, category } = req.body;
     const prod = db.dashboard.topProducts.find(p => p.id === id);
     if (!prod) return res.status(404).json({ error: 'Product not found' });
 
     if (name) prod.name = name;
     if (revenue !== undefined) prod.revenue = Number(revenue);
+    if (quantity !== undefined) prod.quantity = Math.max(1, Number(quantity));
     if (category) prod.category = category;
 
     db.dashboard.topProducts.sort((a, b) => b.revenue - a.revenue);
@@ -460,13 +507,13 @@ function recalculateMetrics(dash: DashboardData) {
 
     recalculateMetrics(db.dashboard);
 
-    addAuditLog('PRODUCT_UPDATED', db.currentUser.name, db.currentUser.role, `Updated product #${id} (${prod.name}) revenue to ₹${prod.revenue.toLocaleString('en-IN')}`);
+    addAuditLog('PRODUCT_UPDATED', db.currentUser.name, db.currentUser.role, `Updated product #${id} (${prod.name}) Qty: ${prod.quantity || 1}, Revenue: ₹${prod.revenue.toLocaleString('en-IN')}`);
     saveDatabase(db);
     res.json({ success: true, data: db.dashboard, products: db.dashboard.topProducts });
   });
 
   app.post('/api/dashboard/products', requireAdmin, (req, res) => {
-    const { name, revenue, category } = req.body;
+    const { name, revenue, quantity, category } = req.body;
     if (!name || isNaN(Number(revenue))) return res.status(400).json({ error: 'Invalid product payload' });
 
     const newProd = {
@@ -474,6 +521,7 @@ function recalculateMetrics(dash: DashboardData) {
       rank: db.dashboard.topProducts.length + 1,
       name,
       revenue: Number(revenue),
+      quantity: Number(quantity) > 0 ? Number(quantity) : 1,
       category: category || 'General',
     };
 

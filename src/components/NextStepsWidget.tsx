@@ -45,25 +45,25 @@ export const NextStepsWidget: React.FC<NextStepsWidgetProps> = ({
   const completedCount = items.filter((i) => i.completed).length;
 
   return (
-    <div className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-2xs">
+    <div className="bg-slate-900/80 backdrop-blur-md rounded-2xl p-5 border border-cyan-500/30 shadow-lg">
       <div className="flex items-center justify-between mb-3.5">
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700">
-            <Target className="w-4 h-4 text-emerald-600" />
+          <div className="w-6 h-6 rounded-full bg-cyan-950 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+            <Target className="w-4 h-4 text-cyan-400" />
           </div>
-          <h3 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
+          <h3 className="text-base sm:text-lg font-bold text-cyan-400 tracking-tight">
             Next Steps / Focus Areas
           </h3>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+          <span className="text-xs font-semibold text-cyan-300 bg-cyan-950/80 border border-cyan-500/40 px-2.5 py-0.5 rounded-full">
             {completedCount}/{items.length} Active
           </span>
           {canEdit && (
             <button
               onClick={() => setIsAdding(!isAdding)}
-              className="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-0.5"
+              className="text-xs text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-0.5 transition-colors"
             >
               <Plus className="w-3.5 h-3.5" /> Add
             </button>
@@ -78,19 +78,19 @@ export const NextStepsWidget: React.FC<NextStepsWidgetProps> = ({
             placeholder="Add new focus milestone..."
             value={newItemText}
             onChange={(e) => setNewItemText(e.target.value)}
-            className="flex-1 text-xs px-3 py-1.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="flex-1 text-xs px-3 py-1.5 bg-slate-950 border border-cyan-500/40 text-slate-100 rounded-lg focus:outline-none focus:border-cyan-400 placeholder-slate-500"
             autoFocus
           />
           <button
             type="submit"
-            className="text-xs bg-emerald-600 text-white font-semibold px-3 py-1.5 rounded-lg hover:bg-emerald-700"
+            className="text-xs bg-cyan-600 text-white font-semibold px-3 py-1.5 rounded-lg hover:bg-cyan-500 transition-colors"
           >
             Save
           </button>
           <button
             type="button"
             onClick={() => setIsAdding(false)}
-            className="text-slate-400 hover:text-slate-600 p-1"
+            className="text-slate-400 hover:text-slate-200 p-1"
           >
             <X className="w-4 h-4" />
           </button>
@@ -99,7 +99,7 @@ export const NextStepsWidget: React.FC<NextStepsWidgetProps> = ({
 
       {/* List */}
       {items.length === 0 ? (
-        <div className="py-6 text-center text-slate-400 text-xs font-semibold bg-slate-50/50 rounded-xl border border-dashed border-slate-200">
+        <div className="py-6 text-center text-slate-400 text-xs font-semibold bg-slate-950/40 rounded-xl border border-dashed border-cyan-500/30">
           No focus areas added yet. Click "+ Add" to set custom milestones.
         </div>
       ) : (
@@ -109,20 +109,20 @@ export const NextStepsWidget: React.FC<NextStepsWidgetProps> = ({
               <div
                 key={step.id}
                 onClick={() => handleToggle(step.id)}
-                className={`flex items-start gap-2.5 p-1.5 rounded-lg transition-colors cursor-pointer group hover:bg-slate-50 ${
+                className={`flex items-start gap-2.5 p-2 rounded-lg transition-colors cursor-pointer group hover:bg-cyan-950/30 border border-transparent hover:border-cyan-500/20 ${
                   !step.completed ? 'opacity-70' : ''
                 }`}
               >
-                <div className="mt-0.5 shrink-0 text-emerald-600">
+                <div className="mt-0.5 shrink-0 text-cyan-400">
                   {step.completed ? (
-                    <CheckCircle2 className="w-4.5 h-4.5 fill-emerald-600 text-white" />
+                    <CheckCircle2 className="w-4.5 h-4.5 fill-cyan-500 text-slate-950" />
                   ) : (
-                    <Circle className="w-4.5 h-4.5 text-slate-300 group-hover:text-emerald-500" />
+                    <Circle className="w-4.5 h-4.5 text-slate-500 group-hover:text-cyan-400" />
                   )}
                 </div>
                 <span
                   className={`text-xs sm:text-sm font-semibold leading-snug transition-colors ${
-                    step.completed ? 'text-slate-800' : 'text-slate-500 line-through'
+                    step.completed ? 'text-slate-100' : 'text-slate-400 line-through'
                   }`}
                 >
                   {step.text}

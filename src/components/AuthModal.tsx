@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, User, ShieldCheck, LogIn, Mail, Lock, UserCheck, KeyRound, Check } from 'lucide-react';
+import { X, User, ShieldCheck, LogIn, Mail, Lock, UserCheck, KeyRound, Check, UserPlus } from 'lucide-react';
 import { User as UserType, UserRole } from '../types';
 import { api } from '../services/api';
 
@@ -10,6 +10,7 @@ interface AuthModalProps {
   onUpdateProfile: (payload: { name: string; email: string; avatarUrl?: string }) => Promise<void>;
   onSwitchRole: (role: UserRole) => Promise<void>;
   onLogin: (email: string, password?: string, role?: UserRole) => Promise<void>;
+  onUserChanged?: (user: UserType) => void;
 }
 
 export const AuthModal: React.FC<AuthModalProps> = ({
@@ -19,13 +20,20 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   onUpdateProfile,
   onSwitchRole,
   onLogin,
+  onUserChanged,
 }) => {
-  const [activeTab, setActiveTab] = useState<'login' | 'profile' | 'password'>('login');
+  const [activeTab, setActiveTab] = useState<'login' | 'signup' | 'password' | 'profile'>('login');
   
   // Login form state
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [loginRole, setLoginRole] = useState<UserRole>('admin');
+
+  // Sign Up form state
+  const [signupName, setSignupName] = useState('');
+  const [signupEmail, setSignupEmail] = useState('');
+  const [signupPassword, setSignupPassword] = useState('');
+  const [signupRole, setSignupRole] = useState<UserRole>('admin');
 
   // Profile form state
   const [name, setName] = useState(currentUser.name);
@@ -50,23 +58,58 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       setError('Email address is required.');
       return;
     }
-    if (loginRole === 'admin' && !loginPassword) {
-      setError('Password is required for Admin / Manager sign in.');
-      return;
-    }
 
     setSaving(true);
     setError('');
     try {
       await onLogin(loginEmail.trim(), loginPassword, loginRole);
-      setMsg(`Logged in successfully as ${loginEmail.trim()}`);
+      setMsg(`Signed in successfully as ${loginEmail.trim()}`);
       setTimeout(() => {
         setMsg('');
         onClose();
       }, 900);
     } catch (err: any) {
       console.error(err);
-      setError(err?.message || 'Authentication failed. Please check your credentials.');
+      setError(err?.message || 'Authentication failed. Please check your email and password.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleCustomSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!signupName.trim() || !signupEmail.trim() || !signupPassword) {
+      setError('Please fill in all required fields.');
+      return;
+    }
+    if (signupPassword.length < 4) {
+      setError('Password must be at least 4 characters long.');
+      return;
+    }
+
+    setSaving(true);
+    setError('');
+    try {
+      const res = await api.signup({
+        name: signupName.trim(),
+        email: signupEmail.trim(),
+        password: signupPassword,
+        role: signupRole,
+      });
+      if (res.user && onUserChanged) {
+        onUserChanged(res.user);
+      }
+      setMsg(`Account created! Signed in as ${signupName.trim()}`);
+      setSignupName('');
+      setSignupEmail('');
+      setSignupPassword('');
+      setTimeout(() => {
+        setMsg('');
+        onClose();
+      }, 1000);
+    } catch (err: any) {
+      console.error(err);
+      setError(err?.message || 'Registration failed.');
     } finally {
       setSaving(false);
     }
@@ -81,7 +124,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       if (selectedRole !== currentUser.role) {
         await onSwitchRole(selectedRole);
       }
-      setMsg('Profile and permissions updated securely!');
+      setMsg('Profile and permissions updated!');
       setTimeout(() => {
         setMsg('');
         onClose();
@@ -113,7 +156,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     setError('');
     try {
       await api.changePassword(currentPass, newPass);
-      setMsg('Admin password updated successfully!');
+      setMsg('Account password updated successfully!');
       setCurrentPass('');
       setNewPass('');
       setConfirmPass('');
@@ -130,34 +173,34 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-      <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+      <div className="bg-slate-900/95 rounded-2xl max-w-md w-full p-6 shadow-[0_0_25px_rgba(6,182,212,0.2)] border border-cyan-500/40 text-slate-100 animate-in fade-in zoom-in-95 duration-150">
         
         {/* Modal Header */}
-        <div className="flex items-center justify-between pb-3.5 border-b border-slate-100">
+        <div className="flex items-center justify-between pb-3.5 border-b border-cyan-500/20">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-blue-100 flex items-center justify-center text-blue-700">
+            <div className="w-9 h-9 rounded-xl bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center text-cyan-400">
               <User className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-900">User Sign In & Access Control</h3>
-              <p className="text-[11px] text-slate-500">Authentication & Security Settings</p>
+              <h3 className="text-base font-bold text-cyan-300">Authentication & Access Control</h3>
+              <p className="text-[11px] text-slate-400">Secure Sign In, Registration & Account Security</p>
             </div>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600">
+          <button onClick={onClose} className="text-slate-400 hover:text-cyan-300 transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex border-b border-slate-100 mt-4">
+        <div className="flex border-b border-cyan-500/20 mt-4">
           <button
             type="button"
             onClick={() => { setActiveTab('login'); setError(''); }}
             className={`flex-1 py-2 text-xs font-bold flex items-center justify-center gap-1.5 border-b-2 transition-all ${
               activeTab === 'login'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-slate-500 hover:text-slate-700'
+                ? 'border-cyan-400 text-cyan-400'
+                : 'border-transparent text-slate-400 hover:text-slate-200'
             }`}
           >
             <LogIn className="w-3.5 h-3.5" />
@@ -165,63 +208,61 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           </button>
           <button
             type="button"
-            onClick={() => { setActiveTab('profile'); setError(''); }}
+            onClick={() => { setActiveTab('signup'); setError(''); }}
             className={`flex-1 py-2 text-xs font-bold flex items-center justify-center gap-1.5 border-b-2 transition-all ${
-              activeTab === 'profile'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-slate-500 hover:text-slate-700'
+              activeTab === 'signup'
+                ? 'border-cyan-400 text-cyan-400'
+                : 'border-transparent text-slate-400 hover:text-slate-200'
             }`}
           >
-            <UserCheck className="w-3.5 h-3.5" />
-            <span>Edit Profile</span>
+            <UserPlus className="w-3.5 h-3.5" />
+            <span>Sign Up</span>
           </button>
           <button
             type="button"
             onClick={() => { setActiveTab('password'); setError(''); }}
             className={`flex-1 py-2 text-xs font-bold flex items-center justify-center gap-1.5 border-b-2 transition-all ${
               activeTab === 'password'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-slate-500 hover:text-slate-700'
+                ? 'border-cyan-400 text-cyan-400'
+                : 'border-transparent text-slate-400 hover:text-slate-200'
             }`}
           >
             <KeyRound className="w-3.5 h-3.5" />
-            <span>Security & Pass</span>
+            <span>Security</span>
           </button>
         </div>
 
         {error && (
-          <div className="mt-3 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-semibold">
+          <div className="mt-3 p-3 rounded-xl bg-rose-950/80 border border-rose-500/40 text-rose-300 text-xs font-semibold">
             {error}
           </div>
         )}
 
         {msg ? (
-          <div className="py-8 text-center text-emerald-600 font-bold text-sm flex flex-col items-center gap-2">
-            <Check className="w-8 h-8 p-1.5 bg-emerald-100 rounded-full text-emerald-600" />
+          <div className="py-8 text-center text-emerald-400 font-bold text-sm flex flex-col items-center gap-2">
+            <Check className="w-8 h-8 p-1.5 bg-emerald-950/80 border border-emerald-500/40 rounded-full text-emerald-400" />
             <span>{msg}</span>
           </div>
         ) : activeTab === 'login' ? (
-          /* TAB 1: USER LOGIN / SWITCH ACCOUNT */
+          /* TAB 1: SIGN IN */
           <div className="mt-4 space-y-4">
-            
-            {/* Custom Email & Password Sign In */}
             <form onSubmit={handleCustomLogin} className="space-y-3">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Role Permission
+                <label className="block text-xs font-bold text-slate-300 mb-1">
+                  Access Level Role
                 </label>
                 <select
                   value={loginRole}
                   onChange={(e) => setLoginRole(e.target.value as UserRole)}
-                  className="w-full text-xs font-semibold px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white"
+                  className="w-full text-xs font-semibold px-3 py-2 border border-cyan-500/30 rounded-xl focus:ring-2 focus:ring-cyan-400 focus:outline-none bg-slate-900 text-slate-100"
                 >
-                  <option value="admin">Admin / Manager (Full Access & Controls)</option>
+                  <option value="admin">Admin / Manager (Full Access Controls)</option>
                   <option value="investor">Investor (Read-Only Portfolio View)</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-300 mb-1">
                   Email Address
                 </label>
                 <div className="relative">
@@ -232,180 +273,158 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     placeholder="user@dashboard.com"
                     value={loginEmail}
                     onChange={(e) => setLoginEmail(e.target.value)}
-                    className="w-full text-xs font-semibold pl-9 pr-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="w-full text-xs font-semibold pl-9 pr-3 py-2 border border-cyan-500/30 bg-slate-900 rounded-xl focus:ring-2 focus:ring-cyan-400 focus:outline-none text-slate-100"
                   />
                 </div>
               </div>
 
-              {loginRole === 'admin' && (
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Admin Password
-                  </label>
-                  <div className="relative">
-                    <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
-                    <input
-                      type="password"
-                      required
-                      placeholder="Enter admin password (admin123)"
-                      value={loginPassword}
-                      onChange={(e) => setLoginPassword(e.target.value)}
-                      className="w-full text-xs font-semibold pl-9 pr-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    />
-                  </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-300 mb-1">
+                  Password
+                </label>
+                <div className="relative">
+                  <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                  <input
+                    type="password"
+                    required
+                    placeholder="Enter account password"
+                    value={loginPassword}
+                    onChange={(e) => setLoginPassword(e.target.value)}
+                    className="w-full text-xs font-semibold pl-9 pr-3 py-2 border border-cyan-500/30 bg-slate-900 rounded-xl focus:ring-2 focus:ring-cyan-400 focus:outline-none text-slate-100"
+                  />
                 </div>
-              )}
+              </div>
 
               <button
                 type="submit"
                 disabled={saving}
-                className="w-full py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5"
+                className="w-full py-2.5 text-xs font-bold text-white bg-cyan-600 hover:bg-cyan-500 rounded-xl shadow-[0_0_12px_rgba(6,182,212,0.4)] transition-all flex items-center justify-center gap-1.5"
               >
                 <LogIn className="w-4 h-4" />
                 <span>{saving ? 'Authenticating...' : 'Sign In To Dashboard'}</span>
               </button>
             </form>
 
-            <div className="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200 text-emerald-900 text-xs flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>JWT Bearer Token issued with AES-256 session encryption.</span>
+            <div className="p-3 rounded-xl bg-cyan-950/40 border border-cyan-500/30 text-cyan-300 text-xs flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-cyan-400 shrink-0" />
+              <span>AES-256 session token issuing enabled.</span>
             </div>
-
           </div>
-        ) : activeTab === 'profile' ? (
-          /* TAB 2: EDIT ACTIVE PROFILE */
-          <form onSubmit={handleSaveProfile} className="mt-4 space-y-4">
-            
-            {/* Avatar Preview */}
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
-              <img
-                src={avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'}
-                alt="Avatar"
-                className="w-12 h-12 rounded-full object-cover ring-2 ring-blue-500/20"
-              />
-              <div className="flex-1">
-                <label className="block text-[11px] font-bold text-slate-700">
-                  Avatar Image URL
+        ) : activeTab === 'signup' ? (
+          /* TAB 2: SIGN UP / REGISTER NEW USER */
+          <div className="mt-4 space-y-4">
+            <form onSubmit={handleCustomSignup} className="space-y-3">
+              <div>
+                <label className="block text-xs font-bold text-slate-300 mb-1">
+                  Full Name
                 </label>
                 <input
                   type="text"
-                  value={avatarUrl}
-                  onChange={(e) => setAvatarUrl(e.target.value)}
-                  className="w-full text-xs px-2 py-1 bg-white border border-slate-300 rounded-md mt-1"
-                  placeholder="https://..."
+                  required
+                  placeholder="e.g. Maithili S."
+                  value={signupName}
+                  onChange={(e) => setSignupName(e.target.value)}
+                  className="w-full text-xs font-semibold px-3 py-2 border border-cyan-500/30 bg-slate-900 rounded-xl focus:ring-2 focus:ring-cyan-400 focus:outline-none text-slate-100"
                 />
               </div>
-            </div>
 
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
-                Full Name
-              </label>
-              <input
-                type="text"
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full text-xs font-semibold px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
-                Email Address
-              </label>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full text-xs font-semibold px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              />
-            </div>
-
-            {/* Role selection */}
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                Assigned Access Role
-              </label>
-              <div className="grid grid-cols-2 gap-2">
-                {[
-                  { id: 'admin', label: 'Admin / Manager', desc: 'Full Access' },
-                  { id: 'investor', label: 'Investor', desc: 'Read Only' },
-                ].map((r) => (
-                  <button
-                    key={r.id}
-                    type="button"
-                    onClick={() => setSelectedRole(r.id as UserRole)}
-                    className={`p-2 rounded-xl text-left border transition-all ${
-                      selectedRole === r.id
-                        ? 'border-blue-600 bg-blue-50/70 text-blue-900 shadow-xs ring-1 ring-blue-600'
-                        : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
-                    }`}
-                  >
-                    <div className="text-xs font-bold capitalize">{r.label}</div>
-                    <div className="text-[10px] text-slate-500">{r.desc}</div>
-                  </button>
-                ))}
+              <div>
+                <label className="block text-xs font-bold text-slate-300 mb-1">
+                  Email Address
+                </label>
+                <div className="relative">
+                  <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                  <input
+                    type="email"
+                    required
+                    placeholder="user@example.com"
+                    value={signupEmail}
+                    onChange={(e) => setSignupEmail(e.target.value)}
+                    className="w-full text-xs font-semibold pl-9 pr-3 py-2 border border-cyan-500/30 bg-slate-900 rounded-xl focus:ring-2 focus:ring-cyan-400 focus:outline-none text-slate-100"
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-3.5 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl"
-              >
-                Cancel
-              </button>
+              <div>
+                <label className="block text-xs font-bold text-slate-300 mb-1">
+                  Set Account Password
+                </label>
+                <div className="relative">
+                  <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                  <input
+                    type="password"
+                    required
+                    placeholder="Minimum 4 characters"
+                    value={signupPassword}
+                    onChange={(e) => setSignupPassword(e.target.value)}
+                    className="w-full text-xs font-semibold pl-9 pr-3 py-2 border border-cyan-500/30 bg-slate-900 rounded-xl focus:ring-2 focus:ring-cyan-400 focus:outline-none text-slate-100"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-300 mb-1">
+                  Select Role
+                </label>
+                <select
+                  value={signupRole}
+                  onChange={(e) => setSignupRole(e.target.value as UserRole)}
+                  className="w-full text-xs font-semibold px-3 py-2 border border-cyan-500/30 rounded-xl focus:ring-2 focus:ring-cyan-400 focus:outline-none bg-slate-900 text-slate-100"
+                >
+                  <option value="admin">Admin Manager (Full Control & Edits)</option>
+                  <option value="investor">Investor Partner (Read-Only View)</option>
+                </select>
+              </div>
+
               <button
                 type="submit"
                 disabled={saving}
-                className="px-5 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-xs"
+                className="w-full py-2.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 rounded-xl shadow-[0_0_12px_rgba(16,185,129,0.4)] transition-all flex items-center justify-center gap-1.5"
               >
-                {saving ? 'Saving...' : 'Save Profile Changes'}
+                <UserPlus className="w-4 h-4" />
+                <span>{saving ? 'Registering Account...' : 'Create Account & Sign In'}</span>
               </button>
-            </div>
-          </form>
+            </form>
+          </div>
         ) : (
-          /* TAB 3: CHANGE ADMIN PASSWORD */
+          /* TAB 3: CHANGE PASSWORD */
           <form onSubmit={handleChangePassword} className="mt-4 space-y-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
-                Current Admin Password
+              <label className="block text-xs font-bold text-slate-300 mb-1">
+                Current Password
               </label>
               <div className="relative">
                 <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
                 <input
                   type="password"
                   required
-                  placeholder="Enter current password (admin123)"
+                  placeholder="Enter current password"
                   value={currentPass}
                   onChange={(e) => setCurrentPass(e.target.value)}
-                  className="w-full text-xs font-semibold pl-9 pr-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full text-xs font-semibold pl-9 pr-3 py-2 border border-cyan-500/30 bg-slate-900 rounded-xl focus:ring-2 focus:ring-cyan-400 focus:outline-none text-slate-100"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
-                New Admin Password
+              <label className="block text-xs font-bold text-slate-300 mb-1">
+                New Password
               </label>
               <div className="relative">
                 <KeyRound className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
                 <input
                   type="password"
                   required
-                  placeholder="Enter new secure password"
+                  placeholder="Enter new password"
                   value={newPass}
                   onChange={(e) => setNewPass(e.target.value)}
-                  className="w-full text-xs font-semibold pl-9 pr-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full text-xs font-semibold pl-9 pr-3 py-2 border border-cyan-500/30 bg-slate-900 rounded-xl focus:ring-2 focus:ring-cyan-400 focus:outline-none text-slate-100"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
+              <label className="block text-xs font-bold text-slate-300 mb-1">
                 Confirm New Password
               </label>
               <div className="relative">
@@ -416,29 +435,25 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   placeholder="Re-enter new password"
                   value={confirmPass}
                   onChange={(e) => setConfirmPass(e.target.value)}
-                  className="w-full text-xs font-semibold pl-9 pr-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full text-xs font-semibold pl-9 pr-3 py-2 border border-cyan-500/30 bg-slate-900 rounded-xl focus:ring-2 focus:ring-cyan-400 focus:outline-none text-slate-100"
                 />
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-blue-50/70 border border-blue-200 text-blue-900 text-[11px] font-medium leading-relaxed">
-              Updating the admin password encrypts data modifications and requires new password verification on next Admin sign-in.
-            </div>
-
-            <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
+            <div className="flex justify-end gap-2 pt-2 border-t border-cyan-500/20">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-3.5 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl"
+                className="px-3.5 py-2 text-xs font-semibold text-slate-400 hover:text-slate-200 rounded-xl"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={saving}
-                className="px-5 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-xs"
+                className="px-5 py-2 text-xs font-bold text-white bg-cyan-600 hover:bg-cyan-500 rounded-xl shadow-[0_0_12px_rgba(6,182,212,0.4)]"
               >
-                {saving ? 'Updating...' : 'Update Admin Password'}
+                {saving ? 'Updating...' : 'Update Password'}
               </button>
             </div>
           </form>

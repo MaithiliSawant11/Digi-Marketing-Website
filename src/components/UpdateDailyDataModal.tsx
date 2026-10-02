@@ -90,51 +90,51 @@ export const UpdateDailyDataModal: React.FC<UpdateDailyDataModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-      <div className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+      <div className="bg-slate-900/95 backdrop-blur-xl rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-cyan-500/40 text-slate-100 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
         
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+            <div className="w-10 h-10 rounded-xl bg-cyan-950 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
               <PlusCircle className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-slate-900 leading-tight">
+              <h3 className="text-lg font-bold text-cyan-400 leading-tight">
                 Update Daily Marketing Data
               </h3>
-              <p className="text-xs text-slate-500 font-medium">
-                Synchronizes live into September 2026 metrics & revenue charts
+              <p className="text-xs text-slate-400 font-medium">
+                Synchronizes live into metrics & revenue charts
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
+            className="text-slate-400 hover:text-slate-200 p-1.5 rounded-lg hover:bg-slate-800 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {successMsg ? (
-          <div className="py-12 text-center text-emerald-600 font-bold text-base flex flex-col items-center gap-2">
-            <CheckCircle className="w-12 h-12 text-emerald-500" />
+          <div className="py-12 text-center text-emerald-400 font-bold text-base flex flex-col items-center gap-2">
+            <CheckCircle className="w-12 h-12 text-emerald-400" />
             <span>{successMsg}</span>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="mt-4 space-y-4">
             
             {/* Target Progress Bar */}
-            <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl">
-              <div className="flex items-center justify-between text-xs font-semibold text-slate-700 mb-1.5">
+            <div className="p-3 bg-slate-950 border border-cyan-500/30 rounded-xl">
+              <div className="flex items-center justify-between text-xs font-semibold text-slate-300 mb-1.5">
                 <span>September Sales Progress</span>
-                <span className="font-extrabold text-blue-600">
+                <span className="font-extrabold text-cyan-400">
                   ₹{currentSepSales.toLocaleString('en-IN')} / ₹{targetGoal.toLocaleString('en-IN')}
                 </span>
               </div>
-              <div className="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+              <div className="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-blue-500 to-emerald-500 transition-all duration-500"
+                  className="h-full bg-gradient-to-r from-cyan-500 to-emerald-400 transition-all duration-500"
                   style={{
                     width: `${Math.min(100, Math.round((currentSepSales / targetGoal) * 100))}%`,
                   }}
@@ -144,7 +144,7 @@ export const UpdateDailyDataModal: React.FC<UpdateDailyDataModalProps> = ({
 
             {/* Sales Amount */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
+              <label className="block text-xs font-bold text-cyan-300 mb-1">
                 Daily Sales Revenue (₹) *
               </label>
               <div className="relative">
@@ -155,7 +155,7 @@ export const UpdateDailyDataModal: React.FC<UpdateDailyDataModalProps> = ({
                   placeholder="e.g. 5000"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="w-full pl-7 pr-3 py-2 text-sm font-bold text-slate-900 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full pl-7 pr-3 py-2 text-sm font-bold text-slate-100 bg-slate-950 border border-cyan-500/40 rounded-xl focus:outline-none focus:border-cyan-400"
                   autoFocus
                 />
               </div>
@@ -168,7 +168,7 @@ export const UpdateDailyDataModal: React.FC<UpdateDailyDataModalProps> = ({
                     key={preset}
                     type="button"
                     onClick={() => addPreset(preset)}
-                    className="px-2 py-0.5 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold border border-blue-200 text-[11px] transition-colors"
+                    className="px-2 py-0.5 rounded-md bg-cyan-950 hover:bg-cyan-900 text-cyan-300 font-semibold border border-cyan-500/40 text-[11px] transition-colors"
                   >
                     +₹{preset.toLocaleString('en-IN')}
                   </button>
@@ -179,13 +179,13 @@ export const UpdateDailyDataModal: React.FC<UpdateDailyDataModalProps> = ({
             {/* Channel & Date Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-cyan-300 mb-1">
                   Marketing Channel
                 </label>
                 <select
                   value={channel}
                   onChange={(e: any) => setChannel(e.target.value)}
-                  className="w-full px-3 py-2 text-xs font-semibold text-slate-800 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                  className="w-full px-3 py-2 text-xs font-semibold text-slate-100 border border-cyan-500/40 rounded-xl focus:outline-none focus:border-cyan-400 bg-slate-950"
                 >
                   <option value="Meta Ads">Meta Ads (FB/IG)</option>
                   <option value="Google Ads">Google Ads / PPC</option>
@@ -197,21 +197,21 @@ export const UpdateDailyDataModal: React.FC<UpdateDailyDataModalProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-cyan-300 mb-1">
                   Log Date
                 </label>
                 <input
                   type="date"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="w-full px-3 py-2 text-xs font-semibold text-slate-800 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                  className="w-full px-3 py-2 text-xs font-semibold text-slate-100 border border-cyan-500/40 rounded-xl focus:outline-none focus:border-cyan-400 bg-slate-950"
                 />
               </div>
             </div>
 
             {/* Campaign Name */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
+              <label className="block text-xs font-bold text-cyan-300 mb-1">
                 Campaign / Source Tag (Optional)
               </label>
               <input
@@ -219,13 +219,13 @@ export const UpdateDailyDataModal: React.FC<UpdateDailyDataModalProps> = ({
                 placeholder="e.g. Smart Watches Retargeting Autumn 2026"
                 value={campaignName}
                 onChange={(e) => setCampaignName(e.target.value)}
-                className="w-full px-3 py-2 text-xs text-slate-800 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 text-xs text-slate-100 bg-slate-950 border border-cyan-500/40 rounded-xl focus:outline-none focus:border-cyan-400"
               />
             </div>
 
             {/* Notes */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
+              <label className="block text-xs font-bold text-cyan-300 mb-1">
                 Daily Performance Notes
               </label>
               <textarea
@@ -233,23 +233,23 @@ export const UpdateDailyDataModal: React.FC<UpdateDailyDataModalProps> = ({
                 placeholder="Key drivers, conversion ROAS, top SKU details..."
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
-                className="w-full px-3 py-2 text-xs text-slate-800 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 text-xs text-slate-100 bg-slate-950 border border-cyan-500/40 rounded-xl focus:outline-none focus:border-cyan-400"
               />
             </div>
 
             {/* Submit Buttons */}
-            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"
+                className="px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-800 rounded-xl transition-colors"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting || !amount}
-                className="px-5 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-xl shadow-xs hover:shadow transition-all flex items-center gap-1.5"
+                className="px-5 py-2 text-xs font-bold text-white bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 rounded-xl shadow-lg transition-all flex items-center gap-1.5"
               >
                 {isSubmitting ? 'Syncing...' : 'Confirm & Update Dashboard'}
               </button>
@@ -259,31 +259,31 @@ export const UpdateDailyDataModal: React.FC<UpdateDailyDataModalProps> = ({
 
         {/* Recent Daily Entries Log */}
         {recentLogs && recentLogs.length > 0 && (
-          <div className="mt-5 pt-4 border-t border-slate-100">
-            <h4 className="text-xs font-bold text-slate-700 mb-2">
+          <div className="mt-5 pt-4 border-t border-slate-800">
+            <h4 className="text-xs font-bold text-cyan-300 mb-2">
               Recent Synchronized Logs
             </h4>
             <div className="space-y-1.5 max-h-32 overflow-y-auto pr-1">
               {recentLogs.slice(0, 5).map((log) => (
                 <div
                   key={log.id}
-                  className="flex items-center justify-between text-[11px] p-2 rounded-lg bg-slate-50 border border-slate-100 text-slate-700"
+                  className="flex items-center justify-between text-[11px] p-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-200"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-slate-900">{log.date}</span>
-                    <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-blue-100 text-blue-800">
+                    <span className="font-bold text-slate-100">{log.date}</span>
+                    <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-cyan-900/60 text-cyan-300 border border-cyan-500/30">
                       {log.channel}
                     </span>
-                    <span className="text-slate-500 truncate max-w-[140px]">{log.campaignName}</span>
+                    <span className="text-slate-400 truncate max-w-[140px]">{log.campaignName}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="font-black text-emerald-700">
+                    <span className="font-black text-emerald-400">
                       +₹{log.amount.toLocaleString('en-IN')}
                     </span>
                     {canEdit && onDeleteDailyLog && (
                       <button
                         onClick={() => handleDeleteLog(log.id)}
-                        className="text-slate-400 hover:text-red-600 p-0.5"
+                        className="text-slate-400 hover:text-red-400 p-0.5"
                         title="Delete log entry"
                       >
                         <X className="w-3.5 h-3.5" />

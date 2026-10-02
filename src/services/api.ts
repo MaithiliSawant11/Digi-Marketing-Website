@@ -48,7 +48,7 @@ export const api = {
     return await res.json();
   },
 
-  async addProduct(payload: { name: string; revenue: number; category?: string }): Promise<{ success: boolean; data?: DashboardData; products: ProductItem[] }> {
+  async addProduct(payload: { name: string; revenue: number; quantity?: number; category?: string }): Promise<{ success: boolean; data?: DashboardData; products: ProductItem[] }> {
     const res = await fetch('/api/dashboard/products', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -137,6 +137,19 @@ export const api = {
   },
 
   // Auth & Roles
+  async signup(payload: { name: string; email: string; password: string; role?: string }): Promise<{ success: boolean; user: User }> {
+    const res = await fetch('/api/auth/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || 'Failed to register account');
+    }
+    return await res.json();
+  },
+
   async login(email: string, password?: string, role?: string): Promise<{ success: boolean; user: User }> {
     const res = await fetch('/api/auth/login', {
       method: 'POST',
