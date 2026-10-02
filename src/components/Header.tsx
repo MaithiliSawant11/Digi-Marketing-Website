@@ -37,7 +37,7 @@ export const Header: React.FC<HeaderProps> = ({
   const isInvestor = currentUser.role === 'investor';
 
   return (
-    <header className="w-full bg-slate-900/90 backdrop-blur-md border-b border-cyan-500/30 px-4 sm:px-6 py-3.5 shadow-[0_0_20px_rgba(6,182,212,0.15)] text-slate-100 transition-colors">
+    <header className="relative z-50 w-full bg-slate-900/90 backdrop-blur-md border-b border-cyan-500/30 px-4 sm:px-6 py-3.5 shadow-[0_0_20px_rgba(6,182,212,0.15)] text-slate-100 transition-colors">
       <div className="max-w-[1600px] mx-auto flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         
         {/* Left: Branding & Subtitles */}
@@ -129,7 +129,7 @@ export const Header: React.FC<HeaderProps> = ({
             )}
 
             {/* Role / Profile badge & switcher */}
-            <div className="relative">
+            <div className="relative z-50">
               <button
                 onClick={() => setRoleDropdownOpen(!roleDropdownOpen)}
                 className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-lg border border-cyan-500/40 bg-slate-900/90 hover:bg-slate-800 text-slate-100 transition-colors shadow-[0_0_10px_rgba(6,182,212,0.2)]"
@@ -167,7 +167,7 @@ export const Header: React.FC<HeaderProps> = ({
                     className="fixed inset-0 z-40" 
                     onClick={() => setRoleDropdownOpen(false)} 
                   />
-                  <div className="absolute right-0 mt-2 w-64 bg-slate-900 rounded-xl shadow-[0_0_20px_rgba(6,182,212,0.3)] border border-cyan-500/40 py-2 z-50 animate-in fade-in zoom-in-95 duration-100 text-slate-100">
+                  <div className="absolute right-0 mt-2 w-64 bg-slate-900 rounded-xl shadow-[0_0_25px_rgba(6,182,212,0.6)] border border-cyan-400 py-2 z-50 animate-in fade-in zoom-in-95 duration-100 text-slate-100">
                     <div className="px-3.5 py-2 border-b border-cyan-500/20">
                       <div className="text-xs font-bold text-cyan-300">{currentUser.name}</div>
                       <div className="text-[11px] text-slate-400 truncate">{currentUser.email}</div>
