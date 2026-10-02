@@ -21,6 +21,7 @@ import { ProductsView } from './components/ProductsView';
 import { SalesView } from './components/SalesView';
 import { InvestorsView } from './components/InvestorsView';
 import { GoalsView } from './components/GoalsView';
+import { CyberFrame } from './components/CyberFrame';
 
 import { api } from './services/api';
 import { DashboardData, User, ClientAccount, UserRole, ProductItem, InvestorItem } from './types';
@@ -299,7 +300,7 @@ export default function App() {
   const canEdit = currentUser.role !== 'investor';
 
   return (
-    <div className="min-h-screen bg-[#f0f4f8] text-slate-800 font-sans flex flex-col selection:bg-blue-600 selection:text-white">
+    <CyberFrame>
       
       {/* 1. Header (Exact as in image + live update & profile actions) */}
       <Header
@@ -488,6 +489,6 @@ export default function App() {
         onLogin={handleLogin}
       />
 
-    </div>
+    </CyberFrame>
   );
 }
